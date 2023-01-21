@@ -2,10 +2,12 @@ package com.aqmp.example.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -27,6 +29,19 @@ public class MessageBrokerConfig {
         return QueueBuilder
                 .nonDurable(brokerSettings.getQueueName())
                 .build();
+    }
+
+    @Bean
+    public DirectExchange exchange() {
+        return new DirectExchange(brokerSettings.getExchangeName());
+    }
+
+    @Bean
+    public Binding binding(Queue queue, DirectExchange exchange) {
+        return BindingBuilder
+                .bind(queue)
+                .to(exchange)
+                .with(brokerSettings.getRoutingKey());
     }
 
     @Bean
