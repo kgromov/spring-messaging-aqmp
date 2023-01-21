@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Data
@@ -18,6 +19,6 @@ public class SyncEvent implements Serializable {
     private OffsetDateTime timestamp;
 
    public static SyncEvent createDefault() {
-       return new SyncEvent(UUID.randomUUID(), OffsetDateTime.now());
+       return new SyncEvent(UUID.randomUUID(), OffsetDateTime.now(ZoneId.systemDefault()));
    }
 }

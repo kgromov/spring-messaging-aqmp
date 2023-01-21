@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 public class Receiver {
     private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener
-//    public void listenToEvent(SyncEvent syncEvent) {
-    public void listenToEvent(String message) {
-        log.info("Event {} received", message);
+    @RabbitListener(queues = "q.sync-weather-queue")
+    public void onSyncEvent(SyncEvent event) {
+        log.info("Event {} received", event);
     }
 }
