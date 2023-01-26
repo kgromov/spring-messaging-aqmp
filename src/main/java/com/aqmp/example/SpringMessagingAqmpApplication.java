@@ -1,7 +1,6 @@
 package com.aqmp.example;
 
 import com.aqmp.example.config.BrokerSettings;
-import com.aqmp.example.events.SyncEvent;
 import com.aqmp.example.service.Receiver;
 import com.aqmp.example.service.Sender;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +8,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 @Slf4j
-@EnableConfigurationProperties({BrokerSettings.class})
 @SpringBootApplication
 public class SpringMessagingAqmpApplication {
 
