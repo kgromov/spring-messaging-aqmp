@@ -1,5 +1,7 @@
 package com.aqmp.example.config;
 
+import com.aqmp.example.service.Receiver;
+import com.aqmp.example.service.Sender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
@@ -9,26 +11,20 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
 @Slf4j
-@Configuration
+@AutoConfiguration
 @RequiredArgsConstructor
-@EnableConfigurationProperties
+@EnableConfigurationProperties(BrokerSettings.class)
 public class MessageBrokerConfig {
     private final CachingConnectionFactory cachingConnectionFactory;
-
-    @Bean
-    @ConfigurationProperties(prefix = "rabbitmq")
-    public BrokerSettings brokerSettings() {
-        return  new BrokerSettings();
-    }
 
     @Bean
     public Queue queue(BrokerSettings brokerSettings) {
@@ -69,5 +65,15 @@ public class MessageBrokerConfig {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(cachingConnectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter);
         return rabbitTemplate;
+    }
+
+    @Bean
+    public Receiver receiver(RabbitTemplate rabbitTemplate) {
+        return new Receiver(rabbitTemplate);
+    }
+
+    @Bean
+    public Sender sender(RabbitTemplate rabbitTemplate, BrokerSettings brokerSettings) {
+        return new Sender(brokerSettings, rabbitTemplate);
     }
 }
