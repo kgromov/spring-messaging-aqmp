@@ -4,7 +4,6 @@ import com.aqmp.example.config.BrokerSettings;
 import com.aqmp.example.config.MessageBrokerConfig;
 import com.aqmp.example.service.Receiver;
 import com.aqmp.example.service.Sender;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.AutoConfigurations;

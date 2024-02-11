@@ -14,7 +14,7 @@ public class Sender {
 
     public void sendSynEvent() {
         log.info("About to send sync event");
-        rabbitTemplate.convertAndSend(brokerSettings.getQueueName(), SyncEvent.createDefault());
+        rabbitTemplate.convertAndSend(brokerSettings.queueName(), SyncEvent.createDefault());
         log.info("Sent sync event");
     }
 }
